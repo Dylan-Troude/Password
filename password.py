@@ -27,21 +27,21 @@ while True:
         if not any(35 <= ord(char) <= 38 or 64 == ord(char) or 42 or 94 for char in mdp):
             print("Erreur : le mot de passe doit contenir au moins un caractère spécial (!, @, #, $, %, ^, &, *).")
             j = False
+        if user == mdp:
+            j = False
+            print("Le nom d'utilisateur ne peut pas être identique à votre mot de passe !")
 
         if j == True:
             print("Code valide")
 
-        # Hachage du mot de passe avec SHA-256
-        # Convertir le mot de passe en bytes
+
             mdp_bytes = mdp.encode('utf-8')
 
-        # Créer un objet SHA-256
             hash_object = hashlib.sha256(mdp_bytes)
 
-        # Obtenir le hash sous forme de chaîne hexadécimale
             mdp_hache = hash_object.hexdigest()
 
-        # Affichage du mot de passe haché
+ 
             print("Votre mot de passe haché est : ", mdp_hache)
             break
 
