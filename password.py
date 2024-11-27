@@ -24,16 +24,17 @@ while True:
             print("Erreur : le mot de passe doit contenir au moins un chiffre.")
             j = False
 
-        if not any(35 <= ord(char) <= 38 or 64 == ord(char) or 42 or 94 for char in mdp):
+        if not any((35 <= ord(char) <= 38) or (ord(char) == 64) or (ord(char) == 42) or (ord(char) == 94) for char in mdp):
             print("Erreur : le mot de passe doit contenir au moins un caractère spécial (!, @, #, $, %, ^, &, *).")
+            # 33 = !   ,  64 = @ , # = 35 , $ = 36 , % = 37 , ^ = 94 , & = 38  * = 42 
             j = False
-        if user == mdp:
+
+        if  user == mdp:
             j = False
             print("Le nom d'utilisateur ne peut pas être identique à votre mot de passe !")
 
         if j == True:
             print("Code valide")
-
 
             mdp_bytes = mdp.encode('utf-8')
 
@@ -44,5 +45,3 @@ while True:
  
             print("Votre mot de passe haché est : ", mdp_hache)
             break
-
-# 33 = !   ,  64 = @ , # = 35 , $ = 36 , % = 37 , ^ = 94 , & = 38  * = 42 
