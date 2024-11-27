@@ -1,4 +1,5 @@
 import hashlib
+import json
 
 user = (input("entre votre nom d'utilisateur : "))
 
@@ -42,6 +43,16 @@ while True:
 
             mdp_hache = hash_object.hexdigest()
 
- 
-            print("Votre mot de passe haché est : ", mdp_hache)
-            break
+        try:
+            with open("./password.json", "r") as f:
+                data = json.load(f)
+        except (FileNotFoundError, json.JSONDecodeError):
+            data = []
+
+        data.append({"user": user, "hashed_password": mdp_hache})
+
+        with open("./password.json", "w") as f:
+            json.dump(data, f, indent=2)
+
+        print("Votre mot de passe haché est : ", mdp_hache)
+        break
