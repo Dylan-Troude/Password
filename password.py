@@ -1,5 +1,6 @@
 import hashlib
 import json
+import os
 
 user = (input("entre votre nom d'utilisateur : "))
 
@@ -30,29 +31,28 @@ while True:
             # 33 = !   ,  64 = @ , # = 35 , $ = 36 , % = 37 , ^ = 94 , & = 38  * = 42 
             j = False
 
-        if  user == mdp:
-            j = False
-            print("Le nom d'utilisateur ne peut pas être identique à votre mot de passe !")
+        if j:
+            print("Mot de passe valide.")
 
-        if j == True:
-            print("Code valide")
+        #hachage mot de passe
+            mdp_hache = hashlib.sha256(mdp.encode('utf-8')).hexdigest()
 
-            mdp_bytes = mdp.encode('utf-8')
+        #lecture / init des donnees
+            if os.path.exists("password.json") and os.path.getsize("password.json") > 0:
+                    with open("password.json", "r") as f:
+                     data = json.load(f)
+            else:
+            #si le fichier est vide ou inexistant
+                    data = []
 
-            hash_object = hashlib.sha256(mdp_bytes)
+            if any(entry["hashed_password"] == mdp_hache for entry in data):
+                 print("Code incorrect : ce mot de passe est déjà présent dans le fichier JSON.")
+                 continue
+            else:
+                    data.append({"user": user, "hashed_password": mdp_hache})
 
-            mdp_hache = hash_object.hexdigest()
+            with open("password.json", "w") as f:
+                    json.dump(data, f, indent=2)
 
-        try:
-            with open("./password.json", "r") as f:
-                data = json.load(f)
-        except (FileNotFoundError, json.JSONDecodeError):
-            data = []
-
-        data.append({"user": user, "hashed_password": mdp_hache})
-
-        with open("./password.json", "w") as f:
-            json.dump(data, f, indent=2)
-
-        print("Votre mot de passe haché est : ", mdp_hache)
-        break
+            print("Votre mot de passe haché a été enregistré.")
+            break
